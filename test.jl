@@ -33,7 +33,9 @@ E=collect(1:num_of_edges);
 C=collect(1:k); #COLORS
 
 m = Model();
+
 set_optimizer(m, GLPK.Optimizer);
+set_optimizer_attribute(m, "msg_lev",GLPK.GLP_MSG_ALL);
 
 @variable(m,maxWeight >= 0);		            #(bigger then the points of the color with max points (will be minimized, forcing it equal to max))
 @variable(m, 1 >= x[i in V, j in C] >= 0,Int);  #(true if vertice i has color j)
@@ -41,10 +43,7 @@ set_optimizer(m, GLPK.Optimizer);
 
 @objective(m, Min, maxWeight);
 
-#All nodes have a single color
-for j in C
-	@constraint(m, sum(x[i,j] for i in V) == 1);
-end
+
 
 #All adjacent nodes must have different colors
 for j in C
@@ -66,18 +65,26 @@ for  j in C
 end
 
 
+#All nodes have a single color
+for i in V
+	@constraint(m, sum(x[i,j] for j in C) == 1);
+end
+###
+
+
 optimize!(m);
 
+
+
+printfmt("O melhor resultado é {:.2f}\n",objective_value(m));
+
+#=
 
 for j in C
 	for i in V
 		printfmt("{:.2f} - {:.2f}.\n",j,value(x[i,j]) );
 	end
 end
-
-printfmt("O melhor resultado é {:.2f}\n",objective_value(m));
-
-#=
 
 I=collect(1:3); V=collect(1:3);
 

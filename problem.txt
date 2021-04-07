@@ -10,7 +10,7 @@ subject to
 
 
 //All nodes have a single color
-1. for j in COLORS:
+1. for i in VERTICES:
 	(SUM Xij) = 1
 
 //All adjacent nodes must have different colors
