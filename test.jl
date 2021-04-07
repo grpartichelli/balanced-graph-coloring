@@ -16,24 +16,69 @@ k = parse(Int64,first_line[3]);
 second_line =  split(readline(f), " ");
 weights =  [parse(Float64, x) for x in second_line];
   
-vertices = []
+edges = []
 #REST OF THE INFO
 for line in readlines(f)
 	if(line != "")
 		l = split(line, " ");
-		vertice = [parse(Int64, x) for x in l];
-	    push!(vertices,(vertice[1],vertice[2]));  
+		edge = [parse(Int64, x) for x in l];
+	    push!(edges,(edge[1]+1,edge[2]+1));  
 	end   
 end
 close(f)
 #########################################################################
 
+V=collect(1:num_of_vertex); 
+E=collect(1:num_of_edges); 
+C=collect(1:k); #COLORS
 
-println(vertices);
+m = Model();
+set_optimizer(m, GLPK.Optimizer);
+
+@variable(m,maxWeight >= 0);		            #(bigger then the points of the color with max points (will be minimized, forcing it equal to max))
+@variable(m, 1 >= x[i in V, j in C] >= 0,Int);  #(true if vertice i has color j)
+@variable(m, y[j in C] >= 0); 		            #(total weight of a color)
+
+@objective(m, Min, maxWeight);
+
+#All nodes have a single color
+for j in C
+	@constraint(m, sum(x[i,j] for i in V) == 1);
+end
+
+#All adjacent nodes must have different colors
+for j in C
+	for uv in edges
+		u = uv[1];
+		v = uv[2];
+		@constraint(m, (x[u,j] + x[v,j]) <= 1);
+	end
+end
+
+#Weight of color j
+for j in C
+	@constraint(m, y[j] == sum( (x[i,j]*weights[i]) for i in V) );
+end
+
+#Points of the color with max points (will be minimized so it ends up equal to the max))
+for  j in C
+	@constraint(m,maxWeight >= y[j]);
+end
 
 
+optimize!(m);
+
+
+for j in C
+	for i in V
+		printfmt("{:.2f} - {:.2f}.\n",j,value(x[i,j]) );
+	end
+end
+
+printfmt("O melhor resultado é {:.2f}\n",objective_value(m));
 
 #=
+
 I=collect(1:3); V=collect(1:3);
 
 m = Model()
