@@ -1,0 +1,29 @@
+Xij (true if vertice i has color j)
+Yj	(total points of a color)
+C 	(points of the color with max points (will be minimized))
+Wi  (points of vertice i)
+
+
+min C
+
+subject to
+
+
+//All nodes have a single color
+1. for all j in COLORS:
+	(SUM Xij) = 1
+
+//All adjacent nodes must have different colors
+2. for all u,v in VERTICES and j in COLORS:
+	Xuj + Xvj <= 1
+
+//Points of color i
+3.for all j in COLORS:
+	for all i in VERTICES:
+		Yj += Xij*Wi 
+
+4. for all j in COLORS:
+	C >= Yj
+
+
+Xij {0,1} Yj {0,1}

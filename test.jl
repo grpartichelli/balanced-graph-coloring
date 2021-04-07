@@ -1,33 +1,35 @@
 using JuMP
 using GLPK
 using Formatting
-
+########################################################################
 filename = "cmb/cmb01";
 f = open(filename, "r");
 
 # FIRST LINE INFO
 first_line = split(readline(f), " ");
-num_of_vertex = 
-num_of_edges =
-k = 
+
+num_of_vertex = parse(Int64,first_line[1]);
+num_of_edges = parse(Int64,first_line[2]);
+k = parse(Int64,first_line[3]);
 
 # SECOND LINE INFO
-
-
-
-println(line) 
-
-#=
+second_line =  split(readline(f), " ");
+weights =  [parse(Float64, x) for x in second_line];
+  
+vertices = []
+#REST OF THE INFO
 for line in readlines(f)
-    # print the line
-    println(line)        
+	if(line != "")
+		l = split(line, " ");
+		vertice = [parse(Int64, x) for x in l];
+	    push!(vertices,(vertice[1],vertice[2]));  
+	end   
 end
-=#
 close(f)
+#########################################################################
 
 
-
-
+println(vertices);
 
 
 
