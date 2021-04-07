@@ -11,17 +11,18 @@ subject to
 
 //All nodes have a single color
 1. for i in VERTICES:
-	(SUM Xij) = 1
+	(SUM Xij for j in COLORS) = 1
 
 //All adjacent nodes must have different colors
-2. for all u,v in VERTICES and j in COLORS:
-	Xuj + Xvj <= 1
+2. for  u,v in VERTICES:
+	for j in COLORS:
+		Xuj + Xvj <= 1
 
 //Points of color j
-3.for all j in COLORS:
-	Yj += (SUM Xij*Wi) 
+3.for j in COLORS:
+	Yj = (SUM Xij*Wi for i in VERTICES) 
 
-4. for all j in COLORS:
+4. for j in COLORS:
 	maxWeight >= Yj
 
 
