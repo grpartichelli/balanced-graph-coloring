@@ -35,7 +35,7 @@ C=collect(1:k); #COLORS
 m = Model();
 
 set_optimizer(m, GLPK.Optimizer);
-set_optimizer_attribute(m, "msg_lev",GLPK.GLP_MSG_ALL);
+
 
 @variable(m,maxWeight >= 0);		            #(bigger then the points of the color with max points (will be minimized, forcing it equal to max))
 @variable(m, 1 >= x[i in V, j in C] >= 0,Int);  #(true if vertice i has color j)
