@@ -4,26 +4,27 @@ maxWeight (points of the color with max points (will be minimized))
 Wi  (points of vertice i)
 
 
-min C
+minimize maxWeight
 
 subject to
 
 
-//All nodes have a single color
-1. for i in VERTICES:
-	(SUM Xij for j in COLORS) = 1
+	//All nodes have a single color
+	1. for i in VERTICES:
+		(SUM Xij for j in COLORS) = 1
 
-//All adjacent nodes must have different colors
-2. for  u,v in VERTICES:
-	for j in COLORS:
-		Xuj + Xvj <= 1
+	//All adjacent nodes must have different colors
+	2. for  u,v in VERTICES:
+		for j in COLORS:
+			Xuj + Xvj <= 1
 
-//Points of color j
-3.for j in COLORS:
-	Yj = (SUM Xij*Wi for i in VERTICES) 
-
-4. for j in COLORS:
-	maxWeight >= Yj
+	//Yj is equal to the sum of the weights of the color j
+	3.for j in COLORS:
+		Yj = (SUM Xij*Wi for i in VERTICES) 
 
 
-Xij {0,1} Yj {0,1}
+	4. for j in COLORS:
+		maxWeight >= Yj
+
+
+Xij {0,1} 
